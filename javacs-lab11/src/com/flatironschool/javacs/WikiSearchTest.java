@@ -27,7 +27,9 @@ public class WikiSearchTest {
 	 * @throws java.lang.Exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() throws Exception 
+	{
+		/*
 		Map<String, Integer> map1 = new HashMap<String, Integer>();
 		map1.put("Page1", 1);
 		map1.put("Page2", 2);
@@ -39,6 +41,9 @@ public class WikiSearchTest {
 		map2.put("Page3", 5);
 		map2.put("Page4", 7);
 		search2 = new WikiSearch(map2);
+		*/
+		
+		
 	}
 
 	/**

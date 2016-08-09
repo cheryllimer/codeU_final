@@ -4,6 +4,7 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.jsoup.select.Elements;
@@ -18,6 +19,7 @@ public class Search
 	private Jedis jedis;
 	private WikiCrawler wc;
 	private JedisIndex index;
+	private WikiSearch searcher;
 	
 	public Search() throws Exception
 	{
@@ -52,9 +54,11 @@ public class Search
 		jedis.close();
 	}
 	
-	public void userSearch(String term)
+	public ArrayList<String> userSearch(String term) //one word - fix this!
 	{
-		index.termSet();
+		searcher = new WikiSearch(index.getCounts(term));
+		
+		
 	}
 
 }
