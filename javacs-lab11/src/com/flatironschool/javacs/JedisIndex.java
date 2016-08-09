@@ -21,6 +21,7 @@ import redis.clients.jedis.Transaction;
 public class JedisIndex {
 
 	private Jedis jedis;
+	private int URLcounter;
 
 	/**
 	 * Constructor.
@@ -29,6 +30,7 @@ public class JedisIndex {
 	 */
 	public JedisIndex(Jedis jedis) {
 		this.jedis = jedis;
+		URLcounter = 0;
 	}
 	
 	/**
@@ -140,6 +142,14 @@ public class JedisIndex {
 		String count = jedis.hget(redisKey, term);
 		return new Integer(count);
 	}
+	
+	public double getTDIDF(String url, String term)
+	{
+		double idf = URLcounter/getURLs(term).size();
+		idf = Math.log10(idf);
+		
+		return idf*getCount(url, term);
+	}
 
 	/**
 	 * Add a page to the index.
@@ -147,8 +157,11 @@ public class JedisIndex {
 	 * @param url         URL of the page.
 	 * @param paragraphs  Collection of elements that should be indexed.
 	 */
-	public void indexPage(String url, Elements paragraphs) {
+	public void indexPage(String url, Elements paragraphs) 
+	{
 		System.out.println("Indexing " + url);
+		
+		URLcounter++;
 		
 		// make a TermCounter and count the terms in the paragraphs
 		TermCounter tc = new TermCounter(url);
