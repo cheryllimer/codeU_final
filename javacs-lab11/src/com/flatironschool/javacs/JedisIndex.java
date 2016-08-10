@@ -1,8 +1,6 @@
 package com.flatironschool.javacs;
 
-import java.io.IOException;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,7 +143,7 @@ public class JedisIndex {
 	
 	public double getTDIDF(String url, String term)
 	{
-		double idf = URLcounter/getURLs(term).size();
+		double idf = (double)URLcounter/getURLs(term).size();
 		idf = Math.log10(idf);
 		
 		return idf*getCount(url, term);
@@ -307,40 +305,4 @@ public class JedisIndex {
 		t.exec();
 	}
 
-	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		Jedis jedis = JedisMaker.make();
-		JedisIndex index = new JedisIndex(jedis);
-		
-		//index.deleteTermCounters();
-		//index.deleteURLSets();
-		//index.deleteAllKeys();
-		loadIndex(index);
-		
-		Map<String, Integer> map = index.getCountsFaster("the");
-		for (Entry<String, Integer> entry: map.entrySet()) {
-			System.out.println(entry);
-		}
-	}
-
-	/**
-	 * Stores two pages in the index for testing purposes.
-	 * 
-	 * @return
-	 * @throws IOException
-	 */
-	private static void loadIndex(JedisIndex index) throws IOException {
-		WikiFetcher wf = new WikiFetcher();
-
-		String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
-		Elements paragraphs = wf.readWikipedia(url);
-		index.indexPage(url, paragraphs);
-		
-		url = "https://en.wikipedia.org/wiki/Programming_language";
-		paragraphs = wf.readWikipedia(url);
-		index.indexPage(url, paragraphs);
-	}
 }

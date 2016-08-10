@@ -1,6 +1,5 @@
 package com.flatironschool.javacs;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -135,18 +134,4 @@ public class TermCounter {
 		System.out.println("Total of all counts = " + size());
 	}
 
-	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		String url = "https://en.wikipedia.org/wiki/Java_(programming_language)";
-		
-		WikiFetcher wf = new WikiFetcher();
-		Elements paragraphs = wf.fetchWikipedia(url);
-		
-		TermCounter counter = new TermCounter(url.toString());
-		counter.processElements(paragraphs);
-		counter.printCounts();
-	}
 }

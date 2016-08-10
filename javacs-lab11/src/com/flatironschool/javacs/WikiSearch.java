@@ -1,17 +1,14 @@
 package com.flatironschool.javacs;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.ArrayList;
 
-import redis.clients.jedis.Jedis;
 
 
 /**
@@ -28,16 +25,10 @@ public class WikiSearch {
 	 *
 	 * @param map
 	 */
-	public WikiSearch(Map<String, Double> intMap) 
+	public WikiSearch(Map<String, Double> map) 
 	{
-		this.map = intMap;
-		/*
-		Set<String> iter = intMap.keySet();
-		for(String url: iter)
-		{
-			this.map.put(url, (double)intMap.get(url));
-		}
-		*/
+		this.map = map;
+		
 	}
 
 	/**
@@ -51,26 +42,29 @@ public class WikiSearch {
 		return relevance==null ? 0: relevance;
 	}
 	
-	public void setRelevance()
-	{
-		//Iterator<> iter =  map.entrySet().iterator();
-		Set<String> iter = map.keySet();
-		for(String url: iter)
-		{
-			double relevance = index.
-		}
-	}
 
 	/**
 	 * Prints the contents in order of term frequency.
 	 *
 	 * @param map
 	 */
-	private  void print() {
+	private void print() {
 		List<Entry<String, Double>> entries = sort();
 		for (Entry<String, Double> entry: entries) {
 			System.out.println(entry);
 		}
+	}
+	
+	public ArrayList<Entry<String, Double>> printToScreen()
+	{
+		ArrayList<Entry<String, Double>> list = new ArrayList<Entry<String, Double>>();
+		List<Entry<String, Double>> entries = sort();
+		for (Entry<String, Double> entry: entries) 
+		{
+				list.add(entry);
+		}
+		
+		return list;
 	}
 
 	/**
@@ -165,11 +159,11 @@ public class WikiSearch {
 	            @Override
 	            public int compare(Entry<String, Double> first, Entry<String, Double> second)
 	            {
-	            	if (first.getValue() < second.getValue())
+	            	if (first.getValue() > second.getValue())
 	            	{
 	                    return -1;
 	                }
-	                if (first.getValue() > second.getValue())
+	                if (first.getValue() < second.getValue())
 	                {
 	                    return 1;
 	                }
@@ -201,32 +195,5 @@ public class WikiSearch {
 		
 		
 		return new WikiSearch(doubMap);
-	}
-
-	public static void main(String[] args) throws IOException 
-	{
-		// make a JedisIndex
-		Jedis jedis = JedisMaker.make();
-		JedisIndex index = new JedisIndex(jedis);
-
-		
-		
-		
-		// search for the first term
-		String term1 = "java";
-		System.out.println("Query: " + term1);
-		WikiSearch search1 = search(term1, index);
-		search1.print();
-
-		// search for the second term
-		String term2 = "programming";
-		System.out.println("Query: " + term2);
-		WikiSearch search2 = search(term2, index);
-		search2.print();
-
-		// compute the intersection of the searches
-		System.out.println("Query: " + term1 + " AND " + term2);
-		WikiSearch intersection = search1.and(search2);
-		intersection.print();
 	}
 }
